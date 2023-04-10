@@ -7,15 +7,18 @@ int stayWins = 0;
 int switchWins = 0;
 int carsShown = 0;
 
-#define SWAP(a, b) do { temp = a; a = b; b = temp; } while (0)
+static void swap(int* a, int* b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
 
 static void runTest() {
     // We start with three doors.
     int choice = 1, // The door initially selected by the contestant
         goat = 2,   // The door opened to show a goat
         alt = 3,    // The door the contestant can switch to
-        car,        // The door that hides the car
-        temp;       // Used in the SWAP macro.
+        car;        // The door that hides the car
 
     // The car exists behind one of the three doors.
     car = 1 + (rand() % 3);
@@ -26,10 +29,10 @@ static void runTest() {
         case 0:
             break;
         case 1:
-            SWAP(choice, goat);
+            swap(&choice, &goat);
             break;
         case 2:
-            SWAP(choice, alt);
+            swap(&choice, &alt);
             break;
         default:
             assert(0);
@@ -38,7 +41,7 @@ static void runTest() {
 
     // We randomly swap the goat and alt doors.
     if ((rand() % 2) == 0) {
-        SWAP(goat, alt);
+        swap(&goat, &alt);
     }
 
     // Except if this makes goat the door with the car, we swap (we never
@@ -46,7 +49,7 @@ static void runTest() {
     // Comment out this if statement to allow Monty to open a door to show
     // the car, not a goat.
     if (goat == car) {
-        SWAP(goat, alt);
+        swap(&goat, &alt);
     }
 
     if (car == choice) {
